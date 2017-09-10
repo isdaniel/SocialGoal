@@ -21,18 +21,18 @@ namespace SocialGoal.Tests.Controllers
     [TestFixture]
     public class SearchControllerTest
     {
-        Mock<IGoalRepository> goalRepository;
-        Mock<IUserRepository> userRepository;
-        Mock<IGroupRepository> groupRepository;
-        Mock<IFollowUserRepository> followUserRepository;
-        Mock<IGroupUserRepository> groupUserRepository;
-        Mock<IUserProfileRepository> userProfileRepository;
+        private Mock<IGoalRepository> goalRepository;
+        private Mock<IUserRepository> userRepository;
+        private Mock<IGroupRepository> groupRepository;
+        private Mock<IFollowUserRepository> followUserRepository;
+        private Mock<IGroupUserRepository> groupUserRepository;
+        private Mock<IUserProfileRepository> userProfileRepository;
 
-        IGoalService goalService;
-        IGroupService groupService;
-        IUserService userService;
+        private IGoalService goalService;
+        private IGroupService groupService;
+        private IUserService userService;
 
-        Mock<IUnitOfWork> unitOfWork;
+        private Mock<IUnitOfWork> unitOfWork;
 
         [SetUp]
         public void SetUp()
@@ -62,12 +62,10 @@ namespace SocialGoal.Tests.Controllers
             new Goal{ GoalStatusId =1, GoalName ="a",GoalType = false},
             new Goal{ GoalStatusId =1, GoalName ="abc",GoalType = false},
             new Goal{ GoalStatusId =1, GoalName ="aedg",GoalType = false},
-
-           
           }.AsEnumerable();
             goalRepository.Setup(x => x.GetMany(It.IsAny<Expression<Func<Goal, bool>>>())).Returns(fakegoal);
 
-            IEnumerable<ApplicationUser> fakeUser = new List<ApplicationUser> {            
+            IEnumerable<ApplicationUser> fakeUser = new List<ApplicationUser> {
               new ApplicationUser{Activated=true,Email="user1@foo.com",FirstName="user1",LastName="user1",RoleId=0},
               new ApplicationUser{Activated=true,Email="user2@foo.com",FirstName="user2",LastName="user2",RoleId=0},
               new ApplicationUser{Activated=true,Email="user3@foo.com",FirstName="user3",LastName="user3",RoleId=0},
@@ -89,12 +87,6 @@ namespace SocialGoal.Tests.Controllers
             Assert.IsNotNull(result, "View Result is null");
             Assert.IsInstanceOf(typeof(SearchViewModel),
             result.ViewData.Model, "Wrong View Model");
-
-
-
         }
-
-
-
     }
 }
