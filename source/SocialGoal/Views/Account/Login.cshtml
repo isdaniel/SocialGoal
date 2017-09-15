@@ -12,7 +12,7 @@
 <div class="navbar navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container-fluid">
-            <a class="brand" href='@Url.Action("Index", "Home")'>Social Goal</a>
+            <a class="brand" href='@Url.Action("Index", "Home")'>Demo WEB</a>
         </div>
     </div>
 </div>
@@ -34,14 +34,14 @@
                         @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                         {
                             @Html.AntiForgeryToken()
-                            <h4>Use a local account to log in.</h4>
+                            <h4>帳號登入</h4>
                             <hr />
                             @Html.ValidationSummary(true)
                             <div class="form-group">
-                                @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label", style = "text-align: left;width:80px;" })
+                                @Html.LabelFor(m => m.UserAccount, new { @class = "col-md-2 control-label", style = "text-align: left;width:80px;" })
                                 <div class="col-md-10">
-                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(m => m.Email)
+                                    @Html.TextBoxFor(m => m.UserAccount, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.UserAccount)
                                 </div>
                             </div>
                             <br/>
@@ -62,11 +62,11 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Log in" class="btn btn-primary" />
+                                    <input type="submit" value="登入" class="btn btn-primary" />
                                 </div>
                             </div>
                             <p>
-                                @Html.ActionLink("Register", "Register") if you don't have a local account.
+                                @Html.ActionLink("註冊", "Register") 如果還沒有帳號請註冊
                             </p>
                         }
                     </section>

@@ -232,7 +232,7 @@ namespace SocialGoal.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This email is not registered for any Social Goal users..
+        ///   Looks up a localized string similar to This email is not registered for any Demo WEB users..
         /// </summary>
         internal static string UserDoesntExist {
             get {

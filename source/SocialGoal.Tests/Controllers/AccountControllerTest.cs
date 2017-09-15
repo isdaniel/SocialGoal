@@ -694,7 +694,7 @@ namespace SocialGoal.Web.Controllers.Test
             controller.AuthenticationManager = mockAuthenticationManager.Object;
             ApplicationUser applicationUser = getApplicationUser();
             userManager.CreateAsync(applicationUser, "123456");
-            var result = controller.Login(new LoginViewModel { Email = "adarsh", Password = "123456", RememberMe = false }, "abcd").Result;
+            var result = controller.Login(new LoginViewModel { UserAccount = "adarsh", Password = "123456", RememberMe = false }, "abcd").Result;
             Assert.IsNotNull(result);
             var addedUser = userManager.FindByName("adarsh");
             Assert.IsNotNull(addedUser);

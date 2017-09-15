@@ -175,7 +175,7 @@
     <value>Upload error. Try again!</value>
   </data>
   <data name="UserDoesntExist" xml:space="preserve">
-    <value>This email is not registered for any Social Goal users.</value>
+    <value>This email is not registered for any Demo WEB users.</value>
   </data>
   <data name="WrongEmail" xml:space="preserve">
     <value>Wrong Email Id !</value>

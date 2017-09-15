@@ -76,9 +76,6 @@ namespace SocialGoal.Controllers
             return View(dashboard);
         }
 
-
-
-
         public ViewResult About()
         {
             //ViewBag.Message = "Your quintessential app description page.";
@@ -92,12 +89,6 @@ namespace SocialGoal.Controllers
 
             return View();
         }
-
-
-
-
-
-
 
         public PartialViewResult UserNotification(string id)
         {
