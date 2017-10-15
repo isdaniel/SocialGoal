@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using SocialGoal.Web.Core.Filters;
+using System.Web;
 using System.Web.Mvc;
 
 namespace SocialGoal
@@ -7,7 +8,7 @@ namespace SocialGoal
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new ErrorPageAttribute());
         }
     }
 }

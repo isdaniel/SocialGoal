@@ -1,7 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(SocialGoal.Startup))]
+[assembly: OwinStartup(typeof(SocialGoal.Startup))]
+
 namespace SocialGoal
 {
     public partial class Startup

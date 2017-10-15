@@ -38,6 +38,7 @@ namespace SocialGoal.Web.Controllers
         private ISecurityTokenService securityTokenService;
         private IUserMailer userMailer = new UserMailer();
         private UserManager<ApplicationUser> UserManager;
+
         public AccountController(IUserService userService, IUserProfileService userProfileService, IGoalService goalService, IUpdateService updateService, ICommentService commentService, IFollowRequestService followRequestService, IFollowUserService followUserService, ISecurityTokenService securityTokenService, UserManager<ApplicationUser> userManager)
         {
             this.userService = userService;
@@ -139,7 +140,7 @@ namespace SocialGoal.Web.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-        
+
         //
         // POST: /Account/Disassociate
         [HttpPost]
@@ -233,7 +234,7 @@ namespace SocialGoal.Web.Controllers
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Request a redirect to the external login provider
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }), "224284763432-2j56vo40p59ehlu4uun9kresn2imvf3e.apps.googleusercontent.com");
         }
 
         //
@@ -315,6 +316,7 @@ namespace SocialGoal.Web.Controllers
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
+                    userProfileService.CreateUserProfile(user.Id);
                     if (result.Succeeded)
                     {
                         await SignInAsync(user, isPersistent: false);
@@ -443,7 +445,7 @@ namespace SocialGoal.Web.Controllers
         /// </summary>
         /// <param name="url">The URL containing an image.</param>
         /// <returns>The image as a bitmap.</returns>
-        Bitmap GetImageFromUrl(string url)
+        private Bitmap GetImageFromUrl(string url)
         {
             var buffer = 1024;
             Bitmap image = null;
@@ -478,7 +480,7 @@ namespace SocialGoal.Web.Controllers
         /// </summary>
         /// <param name="url">The URL which should be investigated for a file name.</param>
         /// <returns>The file name.</returns>
-        string GetUrlFileName(string url)
+        private string GetUrlFileName(string url)
         {
             var parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             var last = parts[parts.Length - 1];
@@ -494,7 +496,7 @@ namespace SocialGoal.Web.Controllers
         /// <param name="width">The width of the final image.</param>
         /// <param name="height">The height of the final image.</param>
         /// <returns>The cropped image.</returns>
-        Bitmap CreateImage(Bitmap original, int x, int y, int width, int height)
+        private Bitmap CreateImage(Bitmap original, int x, int y, int width, int height)
         {
             var img = new Bitmap(width, height);
 
@@ -507,7 +509,6 @@ namespace SocialGoal.Web.Controllers
 
             return img;
         }
-
 
         private IEnumerable<string> GetErrorsFromModelState()
         {
@@ -550,7 +551,6 @@ namespace SocialGoal.Web.Controllers
             return View(userprofile);
         }
 
-
         public ActionResult EditBasicInfo()
         {
             var user = userProfileService.GetUser(User.Identity.GetUserId());
@@ -573,7 +573,6 @@ namespace SocialGoal.Web.Controllers
             return PartialView("EditPersonalInfo", editUser);
         }
 
-
         [HttpPost]
         public ActionResult EditProfile(UserProfileFormModel editedProfile)
         {
@@ -591,7 +590,6 @@ namespace SocialGoal.Web.Controllers
             return PartialView("EditProfile", editedProfile);
         }
 
-
         public ActionResult FollowRequest(string id)
         {
             var followRequestFormModel = new FollowRequestFormModel()
@@ -605,7 +603,6 @@ namespace SocialGoal.Web.Controllers
             followRequestService.CreateFollowRequest(followRequest);
             return RedirectToAction("UserProfile", new { id = followRequestFormModel.ToUserId });
         }
-
 
         public ActionResult AcceptRequest(string touserid, string fromuserid)
         {
@@ -631,9 +628,7 @@ namespace SocialGoal.Web.Controllers
         {
             followUserService.DeleteFollowUser(id, User.Identity.GetUserId());
             return RedirectToAction("UserProfile", new { id = id });
-
         }
-
 
         /// <summary>
         /// Followed users by page
@@ -677,8 +672,8 @@ namespace SocialGoal.Web.Controllers
             return View("FollowingUsers", followings);
         }
 
-
         #region Helpers
+
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -692,19 +687,19 @@ namespace SocialGoal.Web.Controllers
         //}
 
         // Add this private variable
-      private IAuthenticationManager _authnManager;
+        private IAuthenticationManager _authnManager;
 
         // Modified this from private to public and add the setter
-      public IAuthenticationManager AuthenticationManager
-      {
-          get
-          {
-              if (_authnManager == null)
-                  _authnManager = HttpContext.GetOwinContext().Authentication;
-              return _authnManager;
-          }
-          set { _authnManager = value; }
-      }
+        public IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                if (_authnManager == null)
+                    _authnManager = HttpContext.GetOwinContext().Authentication;
+                return _authnManager;
+            }
+            set { _authnManager = value; }
+        }
 
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
@@ -778,6 +773,7 @@ namespace SocialGoal.Web.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-        #endregion
+
+        #endregion Helpers
     }
 }

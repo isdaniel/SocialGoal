@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Google;
 using Owin;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SocialGoal
 {
@@ -19,20 +22,31 @@ namespace SocialGoal
             // Use a cookie to temporarily store information about a user logging in with a third party login provider
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
-            // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
+            var authenticationOptions = new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "224284763432-2j56vo40p59ehlu4uun9kresn2imvf3e.apps.googleusercontent.com",
+                ClientSecret = "f7luE6I7uHFqGbhWOvKyfIlJ",
+            };
 
-            //app.UseTwitterAuthentication(
-            //   consumerKey: "",
-            //   consumerSecret: "");
+            authenticationOptions.Scope.Add("profile");
+            // [END configure_google_auth_scopes]
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
-
-            app.UseGoogleAuthentication();
+            authenticationOptions.Provider = new GoogleOAuth2AuthenticationProvider()
+            {
+                // [START read_google_profile_image_url]
+                // After OAuth authentication completes successfully,
+                // read user's profile image URL from the profile
+                // response data and add it to the current user identity
+                OnAuthenticated = context =>
+                {
+                    var profileUrl = context.User["image"]["url"].ToString();
+                    context.Identity.AddClaim(new Claim(ClaimTypes.Uri, profileUrl));
+                    return Task.FromResult(0);
+                }
+                // [END read_google_profile_image_url]
+            };
+            app.UseGoogleAuthentication(authenticationOptions);
+            //app.UseGoogleAuthentication();
         }
     }
 }
